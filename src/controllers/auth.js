@@ -3,7 +3,6 @@ import {
   loginUser,
   logoutUser,
   refreshUsersSession,
-  sendResetEmail,
   requestResetToken,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';

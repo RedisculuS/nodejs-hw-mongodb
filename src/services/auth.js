@@ -134,14 +134,12 @@ export const requestResetToken = async (email) => {
     throw createHttpError(404, 'User not found');
   }
 
-  // Логування для перевірки ID користувача та його типу
   console.log('User ID:', user._id);
-  console.log('User ID Type:', typeof user._id); // Перевірка типу
+  console.log('User ID Type:', typeof user._id);
 
-  // Генерація токена
   const resetToken = jwt.sign(
     {
-      sub: user._id.toString(), // Перетворення в рядок
+      sub: user._id.toString(),
       email,
     },
     env('JWT_SECRET'),
@@ -150,7 +148,6 @@ export const requestResetToken = async (email) => {
     },
   );
 
-  // Надсилаємо електронний лист
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
     'reset-password-email.html',
@@ -177,40 +174,34 @@ export const requestResetToken = async (email) => {
 export const resetPassword = async (payload) => {
   let entries;
 
-  // Перевірка токена
   try {
     entries = jwt.verify(payload.token, env('JWT_SECRET'));
-    console.log('Decoded Token:', entries); // Логування для перевірки
-    console.log('User ID from token:', entries.sub); // Логування для перевірки
+    console.log('Decoded Token:', entries);
+    console.log('User ID from token:', entries.sub);
   } catch (err) {
     if (err instanceof Error)
       throw createHttpError(401, 'Token is expired or invalid.');
   }
 
-  // Пошук користувача
   const user = await UserCollection.findOne({
     email: entries.email,
-    _id: entries.sub, // Використання _id з токена
+    _id: entries.sub,
   });
 
   console.log('Querying user with:', {
     email: entries.email,
     _id: entries.sub,
   });
-  console.log('Found User:', user); // Логування для перевірки
+  console.log('Found User:', user);
 
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
 
-  // Хешування нового пароля
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  // Оновлення пароля
   await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
   );
-
-  // Тут також можна видалити сесію, якщо потрібно
 };
