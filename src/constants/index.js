@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
@@ -16,3 +18,5 @@ export const SMTP = {
 };
 
 export const APP_DOMAIN = 'APP_DOMAIN';
+
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
