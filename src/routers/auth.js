@@ -12,8 +12,8 @@ import {
 
 import { requestResetEmailSchema } from '../validation/auth.js';
 
-// import { resetPasswordSchema } from '../validation/auth.js';
-// import { resetPasswordController } from '../controllers/auth.js';
+import { resetPasswordSchema } from '../validation/auth.js';
+import { resetPasswordController } from '../controllers/auth.js';
 
 const router = Router();
 
@@ -39,10 +39,10 @@ router.post(
   ctrlWrapper(sendResetEmailController),
 );
 
-// router.post(
-//   '/reset-password',
-//   validateBody(resetPasswordSchema),
-//   ctrlWrapper(resetPasswordController),
-// );
+router.post(
+  '/reset-pwd',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
 
 export default router;
