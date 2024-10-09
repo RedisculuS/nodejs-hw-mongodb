@@ -4,9 +4,12 @@ import {
   logoutUser,
   refreshUsersSession,
   sendResetEmail,
+  requestResetToken,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
-// import { resetPassword } from '../services/auth.js';
+import { resetPassword } from '../services/auth.js';
+import { SessionCollection } from '../db/models/session.js';
+import createHttpError from 'http-errors';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -82,7 +85,8 @@ export const sendResetEmailController = async (req, res) => {
   const { email } = req.body;
 
   try {
-    await sendResetEmail(email);
+    // await sendResetEmail(email);
+    await requestResetToken(email);
     res.status(200).json({
       status: 200,
       message: 'Reset password email has been successfully sent.',
@@ -93,5 +97,26 @@ export const sendResetEmailController = async (req, res) => {
       status: error.status || 500,
       message: error.message,
     });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    // Виклик функції для скидання пароля
+    await resetPassword(req.body);
+
+    // Видалити сесію для користувача
+    await SessionCollection.deleteMany({ userId: req.body.userId }); // Додайте userId в payload
+
+    res.status(200).json({
+      message: 'Password has been successfully reset.',
+      status: 200,
+      data: {},
+    });
+  } catch (err) {
+    if (err.status) {
+      throw err; // Якщо це помилка http-errors, передаємо далі
+    }
+    throw createHttpError(500, 'Server Error'); // Інші помилки
   }
 };
