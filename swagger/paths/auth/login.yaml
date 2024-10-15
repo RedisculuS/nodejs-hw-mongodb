@@ -1,0 +1,40 @@
+summary: Log in a user
+operationId: loginUser
+tags:
+  - Auth
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+            format: password
+responses:
+  '200':
+    description: Successfully logged in
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+  '401':
+    description: Unauthorized - Invalid credentials
+  '404':
+    description: Not Found - User not found
+security:
+  - bearerAuth: []

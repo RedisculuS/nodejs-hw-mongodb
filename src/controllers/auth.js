@@ -84,7 +84,6 @@ export const sendResetEmailController = async (req, res) => {
   const { email } = req.body;
 
   try {
-    // await sendResetEmail(email);
     await requestResetToken(email);
     res.status(200).json({
       status: 200,
@@ -101,11 +100,9 @@ export const sendResetEmailController = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   try {
-    // Виклик функції для скидання пароля
     await resetPassword(req.body);
 
-    // Видалити сесію для користувача
-    await SessionCollection.deleteMany({ userId: req.body.userId }); // Додайте userId в payload
+    await SessionCollection.deleteMany({ userId: req.body.userId });
 
     res.status(200).json({
       message: 'Password has been successfully reset.',
@@ -114,8 +111,8 @@ export const resetPasswordController = async (req, res) => {
     });
   } catch (err) {
     if (err.status) {
-      throw err; // Якщо це помилка http-errors, передаємо далі
+      throw err;
     }
-    throw createHttpError(500, 'Server Error'); // Інші помилки
+    throw createHttpError(500, 'Server Error');
   }
 };
