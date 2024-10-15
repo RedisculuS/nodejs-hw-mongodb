@@ -1,0 +1,66 @@
+tags:
+  - Contacts
+summary: Update contact by ID
+operationId: updateContact
+description: Update an existing contact's details. This endpoint requires authorization via a Bearer token.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: The ID of the contact to update
+    schema:
+      type: string
+      example: '65e4decdd286b30065d54af9'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: 'Updated Contact Name'
+          phoneNumber:
+            type: string
+            example: '+0987654321'
+          email:
+            type: string
+            example: 'updated_contact@example.com'
+          isFavourite:
+            type: boolean
+            example: true
+          contactType:
+            type: string
+            example: 'business'
+responses:
+  '200':
+    description: Successfully updated contact
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated the contact!
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Contact not found
+  '401':
+    $ref: '..\..\..\components\responses\401.yaml'
