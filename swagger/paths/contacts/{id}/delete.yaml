@@ -1,0 +1,33 @@
+tags:
+  - Contacts
+summary: Delete contact by ID
+operationId: deleteContact
+description: Remove a contact from the database. This endpoint requires authorization via a Bearer token.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: The ID of the contact to delete
+    schema:
+      type: string
+      example: '65e4decdd286b30065d54af9'
+responses:
+  '204':
+    description: Successfully deleted contact
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Contact not found
+  '401':
+    $ref: '../../../components/responses/401.yaml'

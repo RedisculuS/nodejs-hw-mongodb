@@ -1,0 +1,43 @@
+summary: Register a new user
+operationId: registerUser
+tags:
+  - Auth
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+            format: password
+responses:
+  '201':
+    description: Successfully registered a user
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+            message:
+              type: string
+            data:
+              type: object
+              properties:
+                user:
+                  type: object
+                  additionalProperties: true
+  '409':
+    description: Conflict - Email already in use
+  '400':
+    description: Bad Request - Invalid input
+security:
+  - bearerAuth: []

@@ -1,0 +1,62 @@
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: Create a new contact in the database. This endpoint requires authorization via a Bearer token.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - email
+        properties:
+          name:
+            type: string
+            example: 'New Contact Name'
+          phoneNumber:
+            type: string
+            example: '+1234567890'
+          email:
+            type: string
+            example: 'new_contact@example.com'
+          isFavourite:
+            type: boolean
+            example: false
+          contactType:
+            type: string
+            example: 'personal'
+responses:
+  '201':
+    description: Successfully created contact
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created the contact!
+  '400':
+    description: Bad request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Bad Request
+  '401':
+    $ref: '../../components/responses/401.yaml'
